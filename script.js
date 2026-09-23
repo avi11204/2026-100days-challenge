@@ -124,7 +124,10 @@ const categoryIcons = {
 
     photography: "📸",
 
-    writing: "✍️"
+    writing: "✍️",
+  ux: "🎯",
+nature: "🌌",
+discover: "🌟"
 
 };
 
