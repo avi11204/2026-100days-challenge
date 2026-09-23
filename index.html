@@ -66,9 +66,9 @@
 
                 <p>YOUR JOURNEY</p>
 
-                <div class="day-number">
-                    01
-                </div>
+               <div class="day-number" id="heroDayNumber">
+    01
+</div>
 
                 <h3>Day One</h3>
 
@@ -79,10 +79,13 @@
 
                 <div class="progress-container">
                     <div class="progress-bar">
-                        <div class="progress-fill"></div>
+                      <div
+    class="progress-fill"
+    id="heroProgressFill"
+></div>
                     </div>
 
-                    <span>1 / 100</span>
+                   <span id="heroProgressText">1 / 100</span>
                 </div>
 
             </div>
@@ -229,12 +232,30 @@
         </div>
 
 
-        <button
-            id="completeBtn"
-            class="primary-btn"
-        >
-            Mark Day 1 Complete
-        </button>
+        <div class="challenge-actions">
+
+    <button
+        id="previousBtn"
+        class="secondary-btn"
+    >
+        ← Previous
+    </button>
+
+    <button
+        id="completeBtn"
+        class="primary-btn"
+    >
+        Mark Complete
+    </button>
+
+    <button
+        id="nextBtn"
+        class="secondary-btn"
+    >
+        Next →
+    </button>
+
+</div>
 
     </div>
 
@@ -270,7 +291,9 @@
         <section id="journal" class="section reflection-section">
 
             <div class="section-heading">
-                <p class="eyebrow">DAY 01 REFLECTION</p>
+                <p class="eyebrow" id="reflectionDay">
+    DAY 01 REFLECTION
+</p>
 
                 <h2>
                     What did you <span>discover?</span>
@@ -280,9 +303,9 @@
 
             <div class="reflection-card">
 
-                <label>
-                    What are you most curious about right now?
-                </label>
+            <label id="reflectionQuestion">
+    What are you most curious about right now?
+</label>
 
                 <textarea
                     id="reflection"

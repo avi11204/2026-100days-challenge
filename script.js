@@ -1,6 +1,6 @@
 // ================================
 // 100 DAYS OF EXPLORATION
-// VERSION 2.1
+// VERSION 2.2
 // ================================
 
 import challenges from "./data/challenges.js";
@@ -11,7 +11,8 @@ import questions from "./data/questions.js";
 // THEME TOGGLE
 // -------------------------------
 
-const themeToggle = document.getElementById("themeToggle");
+const themeToggle =
+    document.getElementById("themeToggle");
 
 themeToggle.addEventListener("click", () => {
 
@@ -27,6 +28,7 @@ themeToggle.addEventListener("click", () => {
         "theme",
         isDark ? "dark" : "light"
     );
+
 });
 
 
@@ -40,11 +42,12 @@ if (savedTheme === "dark") {
     document.body.classList.add("dark");
 
     themeToggle.textContent = "☀️";
+
 }
 
 
 // -------------------------------
-// START DAY BUTTON
+// START BUTTON
 // -------------------------------
 
 const startBtn =
@@ -62,177 +65,423 @@ startBtn.addEventListener("click", () => {
 
 
 // -------------------------------
-// CURRENT DAY
+// DAY SYSTEM
 // -------------------------------
 
-const currentDay = 1;
+let currentDay =
+    Number(
+        localStorage.getItem("currentDay")
+    ) || 1;
 
 
 // -------------------------------
-// FIND TODAY'S CHALLENGE
+// ELEMENTS
 // -------------------------------
 
-const todayChallenge =
-    challenges.find(
+const challengeDay =
+    document.getElementById("challengeDay");
+
+const challengeCategory =
+    document.getElementById("challengeCategory");
+
+const challengeDuration =
+    document.getElementById("challengeDuration");
+
+const challengeTitle =
+    document.getElementById("challengeTitle");
+
+const challengeDescription =
+    document.getElementById("challengeDescription");
+
+const challengeOutput =
+    document.getElementById("challengeOutput");
+
+const completeBtn =
+    document.getElementById("completeBtn");
+
+const previousBtn =
+    document.getElementById("previousBtn");
+
+const nextBtn =
+    document.getElementById("nextBtn");
+
+
+// -------------------------------
+// CATEGORY ICONS
+// -------------------------------
+
+const categoryIcons = {
+
+    tech: "💻",
+
+    create: "🎨",
+
+    explore: "🌍",
+
+    culture: "🎬",
+
+    wildcard: "🧪",
+
+    photography: "📸",
+
+    writing: "✍️"
+
+};
+
+
+// -------------------------------
+// GET CHALLENGE
+// -------------------------------
+
+function getChallenge(day) {
+
+    return challenges.find(
         challenge =>
-            challenge.day === currentDay
+            challenge.day === day
     );
 
+}
 
 // -------------------------------
-// DISPLAY TODAY'S CHALLENGE
+// UPDATE PAGE PROGRESS
 // -------------------------------
 
-if (todayChallenge) {
+function updatePageProgress() {
+
+    const heroDayNumber =
+        document.getElementById("heroDayNumber");
+
+    const heroProgressText =
+        document.getElementById("heroProgressText");
+
+    const heroProgressFill =
+        document.getElementById("heroProgressFill");
+
+    const reflectionDay =
+        document.getElementById("reflectionDay");
+
+
+    // Hero day number
+
+    heroDayNumber.textContent =
+        String(currentDay).padStart(2, "0");
+
+
+    // Progress text
+
+    heroProgressText.textContent =
+        `${currentDay} / 100`;
+
+
+    // Progress bar
+
+    const percentage =
+        (currentDay / 100) * 100;
+
+    heroProgressFill.style.width =
+        `${percentage}%`;
+
+
+    // Reflection heading
+
+    reflectionDay.textContent =
+        `DAY ${String(currentDay).padStart(2, "0")} REFLECTION`;
+
+}
+// -------------------------------
+// DISPLAY CHALLENGE
+// -------------------------------
+
+function displayChallenge() {
+
+    const challenge =
+        getChallenge(currentDay);
+
+
+    if (!challenge) {
+
+        challengeTitle.textContent =
+            "Challenge coming soon";
+
+        challengeDescription.textContent =
+            "This day has not been added yet.";
+
+        challengeOutput.innerHTML =
+            "<li>More exploration coming soon.</li>";
+
+        completeBtn.disabled = true;
+
+        return;
+
+    }
+
+// -------------------------------
+// REFLECTION QUESTION
+// -------------------------------
+
+const reflectionQuestion =
+    document.getElementById(
+        "reflectionQuestion"
+    );
+
+reflectionQuestion.textContent =
+    challenge.reflection;
 
     // Day
 
-    document.getElementById(
-        "challengeDay"
-    ).textContent =
+    challengeDay.textContent =
         `DAY ${String(currentDay).padStart(2, "0")}`;
 
 
     // Category
 
-    const categoryIcons = {
-        tech: "💻",
-        create: "🎨",
-        explore: "🌍",
-        culture: "🎬",
-        wildcard: "🧪",
-        photography: "📸",
-        writing: "✍️"
-    };
-
-    const categoryName =
-        todayChallenge.category
-            .toUpperCase();
-
-    const categoryIcon =
+    const icon =
         categoryIcons[
-            todayChallenge.category
+            challenge.category
         ] || "🧪";
 
-    document.getElementById(
-        "challengeCategory"
-    ).textContent =
-        `${categoryIcon} ${categoryName}`;
+
+    challengeCategory.textContent =
+        `${icon} ${challenge.category.toUpperCase()}`;
 
 
     // Duration
 
-    document.getElementById(
-        "challengeDuration"
-    ).textContent =
-        `⏱ ${todayChallenge.duration}`;
+    challengeDuration.textContent =
+        `⏱ ${challenge.duration}`;
 
 
     // Title
 
-    document.getElementById(
-        "challengeTitle"
-    ).textContent =
-        todayChallenge.title;
+    challengeTitle.textContent =
+        challenge.title;
 
 
     // Description
 
-    document.getElementById(
-        "challengeDescription"
-    ).textContent =
-        todayChallenge.description;
+    challengeDescription.textContent =
+        challenge.description;
 
 
     // Output
 
-    const outputList =
-        document.getElementById(
-            "challengeOutput"
-        );
-
-    outputList.innerHTML = `
-        <li>✓ ${todayChallenge.output}</li>
+    challengeOutput.innerHTML = `
+        <li>✓ ${challenge.output}</li>
     `;
 
 
-    console.log(
-        "Today's challenge:",
-        todayChallenge
+    // Completion
+
+    updateCompletionButton();
+
+
+    // Navigation buttons
+
+    previousBtn.disabled =
+        currentDay === 1;
+
+
+    nextBtn.disabled =
+        currentDay === 100;
+
+
+    // Save current day
+
+    localStorage.setItem(
+        "currentDay",
+        currentDay
     );
+ updatePageProgress();
+
+    console.log(
+        "Displaying Day:",
+        currentDay,
+        challenge
+    );
+
 }
 
 
 // -------------------------------
-// DAY 1 COMPLETION
+// COMPLETION
 // -------------------------------
 
-const completeBtn =
-    document.getElementById("completeBtn");
+function isDayCompleted(day) {
 
-
-function loadCompletionStatus() {
-
-    if (
+    return (
         localStorage.getItem(
-            "day1Completed"
+            `day${day}Completed`
         ) === "true"
-    ) {
+    );
 
-        document.getElementById(
-            "daysCompleted"
-        ).textContent = "1";
+}
 
 
-        document.getElementById(
-            "thingsCreated"
-        ).textContent = "1";
+function updateCompletionButton() {
 
+    if (isDayCompleted(currentDay)) {
 
         completeBtn.textContent =
-            "✓ Day 1 Completed";
-
+            `✓ Day ${currentDay} Completed`;
 
         completeBtn.disabled = true;
+
+    } else {
+
+        completeBtn.textContent =
+            `Mark Day ${currentDay} Complete`;
+
+        completeBtn.disabled = false;
 
     }
 
 }
 
 
+// -------------------------------
+// COMPLETE CURRENT DAY
+// -------------------------------
+
 completeBtn.addEventListener("click", () => {
 
     localStorage.setItem(
-        "day1Completed",
+        `day${currentDay}Completed`,
         "true"
     );
 
 
-    document.getElementById(
-        "daysCompleted"
-    ).textContent = "1";
+    updateStats();
 
 
-    document.getElementById(
-        "thingsCreated"
-    ).textContent = "1";
-
-
-    completeBtn.textContent =
-        "✓ Day 1 Completed";
-
-
-    completeBtn.disabled = true;
+    updateCompletionButton();
 
 
     alert(
-        "Day 1 completed! Your 100-day journey has officially begun 🌱"
+        `Day ${currentDay} completed! 🌱`
     );
 
 });
 
 
-loadCompletionStatus();
+// -------------------------------
+// PREVIOUS DAY
+// -------------------------------
+
+previousBtn.addEventListener("click", () => {
+
+    if (currentDay > 1) {
+
+        currentDay--;
+
+        displayChallenge();
+
+        loadRating();
+
+        loadReflection();
+
+    }
+
+});
+
+// -------------------------------
+// NEXT DAY
+// -------------------------------
+
+nextBtn.addEventListener("click", () => {
+
+    if (currentDay < 100) {
+
+        currentDay++;
+
+        displayChallenge();
+
+        loadRating();
+
+        loadReflection();
+
+    }
+
+});
+
+
+// -------------------------------
+// STATS
+// -------------------------------
+
+function updateStats() {
+
+    let completedDays = 0;
+
+    let thingsCreated = 0;
+
+    let thingsTried = 0;
+
+    let techSessions = 0;
+
+
+    for (let day = 1; day <= 100; day++) {
+
+        if (
+            isDayCompleted(day)
+        ) {
+
+            completedDays++;
+
+            thingsTried++;
+
+
+            const challenge =
+                getChallenge(day);
+
+
+            if (
+                challenge?.category ===
+                "tech"
+            ) {
+
+                techSessions++;
+
+            }
+
+
+            if (
+                challenge?.category ===
+                "create"
+            ) {
+
+                thingsCreated++;
+
+            }
+
+        }
+
+    }
+
+
+    document.getElementById(
+        "daysCompleted"
+    ).textContent =
+        completedDays;
+
+
+    document.getElementById(
+        "thingsTried"
+    ).textContent =
+        thingsTried;
+
+
+    document.getElementById(
+        "thingsCreated"
+    ).textContent =
+        thingsCreated;
+
+
+    document.getElementById(
+        "techSessions"
+    ).textContent =
+        techSessions;
+
+}
 
 
 // -------------------------------
@@ -244,58 +493,27 @@ const ratingButtons =
         ".rating button"
     );
 
-let selectedRating = 0;
+
+function loadRating() {
+
+    ratingButtons.forEach(button => {
+
+        button.classList.remove(
+            "selected"
+        );
+
+    });
 
 
-ratingButtons.forEach(button => {
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            selectedRating =
-                Number(
-                    button.dataset.rating
-                );
+    const savedRating =
+        localStorage.getItem(
+            `day${currentDay}Rating`
+        );
 
 
-            ratingButtons.forEach(btn => {
-
-                btn.classList.remove(
-                    "selected"
-                );
-
-            });
-
-
-            button.classList.add(
-                "selected"
-            );
-
-
-            localStorage.setItem(
-                "day1Rating",
-                selectedRating
-            );
-
-        }
-    );
-
-});
-
-
-// Load saved rating
-
-const savedRating =
-    localStorage.getItem(
-        "day1Rating"
-    );
-
-
-if (savedRating) {
-
-    selectedRating =
-        Number(savedRating);
+    if (!savedRating) {
+        return;
+    }
 
 
     ratingButtons.forEach(button => {
@@ -303,7 +521,7 @@ if (savedRating) {
         if (
             Number(
                 button.dataset.rating
-            ) === selectedRating
+            ) === Number(savedRating)
         ) {
 
             button.classList.add(
@@ -317,6 +535,32 @@ if (savedRating) {
 }
 
 
+ratingButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            const rating =
+                Number(
+                    button.dataset.rating
+                );
+
+
+            localStorage.setItem(
+                `day${currentDay}Rating`,
+                rating
+            );
+
+
+            loadRating();
+
+        }
+    );
+
+});
+
+
 // -------------------------------
 // REFLECTION
 // -------------------------------
@@ -326,23 +570,22 @@ const reflection =
         "reflection"
     );
 
-
 const saveReflection =
     document.getElementById(
         "saveReflection"
     );
 
 
-const savedReflection =
-    localStorage.getItem(
-        "day1Reflection"
-    );
+function loadReflection() {
 
+    const savedReflection =
+        localStorage.getItem(
+            `day${currentDay}Reflection`
+        );
 
-if (savedReflection) {
 
     reflection.value =
-        savedReflection;
+        savedReflection || "";
 
 }
 
@@ -367,13 +610,13 @@ saveReflection.addEventListener(
 
 
         localStorage.setItem(
-            "day1Reflection",
+            `day${currentDay}Reflection`,
             text
         );
 
 
         alert(
-            "Reflection saved ✨"
+            `Day ${currentDay} reflection saved ✨`
         );
 
     }
@@ -388,3 +631,16 @@ console.log(
     "Self-discovery questions loaded:",
     questions.length
 );
+
+
+// -------------------------------
+// INITIAL LOAD
+// -------------------------------
+
+displayChallenge();
+
+updateStats();
+
+loadRating();
+
+loadReflection();
