@@ -168,66 +168,77 @@
         </section>
 
 
-        <!-- Today's Challenge -->
-        <section id="challenges" class="section challenge-section">
+       <!-- Today's Challenge -->
+<section id="challenges" class="section challenge-section">
 
-            <div class="section-heading">
-                <p class="eyebrow">DAY 01</p>
+    <div class="section-heading">
+        <p class="eyebrow" id="challengeDay">DAY 01</p>
 
-                <h2>
-                    Today's <span>challenge.</span>
-                </h2>
-            </div>
-
-
-            <div class="challenge-card">
-
-                <div class="challenge-top">
-                    <span class="challenge-category">
-                        💻 TECH
-                    </span>
-
-                    <span class="challenge-time">
-                        ⏱ 30–45 min
-                    </span>
-                </div>
+        <h2>
+            Today's <span>challenge.</span>
+        </h2>
+    </div>
 
 
-                <h3>
-                    Build the beginning of your
-                    100-Day Exploration Tracker.
-                </h3>
+    <div class="challenge-card">
 
-                <p>
-                    Create the first version of the website
-                    that will document everything you learn,
-                    create, explore and discover over the next
-                    100 days.
-                </p>
+        <div class="challenge-top">
 
+            <span
+                class="challenge-category"
+                id="challengeCategory"
+            >
+                💻 TECH
+            </span>
 
-                <div class="challenge-output">
+            <span
+                class="challenge-time"
+                id="challengeDuration"
+            >
+                ⏱ 30–45 min
+            </span>
 
-                    <strong>Today's output</strong>
-
-                    <ul>
-                        <li>✓ Working homepage</li>
-                        <li>✓ Your 100-day journey structure</li>
-                        <li>✓ GitHub repository</li>
-                        <li>✓ First reflection</li>
-                    </ul>
-
-                </div>
+        </div>
 
 
-                <button id="completeBtn" class="primary-btn">
-                    Mark Day 1 Complete
-                </button>
+        <h3 id="challengeTitle">
+            Build the beginning of your
+            100-Day Exploration Tracker.
+        </h3>
 
-            </div>
 
-        </section>
+        <p id="challengeDescription">
+            Create the first version of the website
+            that will document everything you learn,
+            create, explore and discover over the next
+            100 days.
+        </p>
 
+
+        <div class="challenge-output">
+
+            <strong>Today's output</strong>
+
+            <ul id="challengeOutput">
+                <li>✓ Working homepage</li>
+                <li>✓ Your 100-day journey structure</li>
+                <li>✓ GitHub repository</li>
+                <li>✓ First reflection</li>
+            </ul>
+
+        </div>
+
+
+        <button
+            id="completeBtn"
+            class="primary-btn"
+        >
+            Mark Day 1 Complete
+        </button>
+
+    </div>
+
+</section>
 
         <!-- Stats -->
         <section class="stats-section">
@@ -379,7 +390,6 @@
     </footer>
 
 
-    <script src="script.js"></script>
-
+   <script type="module" src="script.js"></script>
 </body>
 </html>
